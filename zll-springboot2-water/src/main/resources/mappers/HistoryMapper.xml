@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zll.water.mapper.HistoryMapper">
+    <!--重新封装连表查询的结果集-->
+    <resultMap id="historyMap" type="History">
+        <id property="hid" column="hid"></id>
+        <result property="sendWaterTime" column="send_water_time"></result>
+        <result property="sendWaterCount" column="send_water_count"></result>
+
+        <!--关联的表-->
+        <association property="worker" javaType="Worker">
+            <result property="workerName" column="worker_name"></result>
+        </association>
+        <association property="customer" javaType="Customer">
+            <result property="custName" column="cust_name"></result>
+        </association>
+    </resultMap>
+
+    <select id="listHistory" resultMap="historyMap">
+        select h.hid,w.worker_name,h.send_water_time,c.cust_name,h.send_water_count
+        from customer c, worker w, history h
+        where h.cust_id = c.cid and h.worker_id = w.wid
+    </select>
+
+    <select id="searchHistory" parameterType="Date" resultMap="historyMap">
+        select h.hid,w.worker_name,h.send_water_time,c.cust_name,h.send_water_count
+        from customer c, worker w, history h
+        where h.cust_id = c.cid and h.worker_id = w.wid
+        <if test="startTime != null and endTime != null">
+            and (send_water_time between #{startTime} and  #{endTime})
+        </if>
+    </select>
+
+    <select id="getHistoryById" parameterType="Integer" resultMap="historyMap">
+        select h.hid,w.worker_name,h.send_water_time,c.cust_name,h.send_water_count
+        from customer c, worker w, history h
+        where h.cust_id = c.cid and h.worker_id = w.wid and hid = #{hid}
+    </select>
+
+    <update id="updateHistory" parameterType="History">
+        update history
+        set cust_id = #{customer.cid} , worker_id = #{worker.wid}, send_water_time = #{sendWaterTime} , send_water_count = #{sendWaterCount}
+        where hid = #{hid}
+    </update>
+
+    <delete id="batchDeleteHistory" parameterType="List">
+        delete from history where hid in
+        <foreach collection="idList" item="hid" open="(" close=")" separator=",">
+            #{hid}
+        </foreach>
+    </delete>
+
+</mapper>

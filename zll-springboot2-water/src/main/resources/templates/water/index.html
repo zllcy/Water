@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Login</title>
+        <meta charset="utf-8">
+        <link th:href="@{/css/style2.css}" rel='stylesheet' type='text/css'/>
+    </head>
+    <body>
+        <!-----start-main---->
+
+        <div class="main">
+            <div class="login-form">
+
+                <h1>用户登录</h1>
+                <div class="head">
+                    <img src="../../images/user.png" alt=""/>
+                </div>
+                <!--
+                th是thymeleaf模板引擎的简称
+                url的路径必须是@{}
+                -->
+                <form th:action="@{/login}" th:method="post">
+                    <input type="text" class="text" name="userName" required placeholder="请输入用户名">
+                    <input type="password" name="userPwd" required placeholder="请输入密码">
+                    <div class="submit">
+                        <input type="submit" name="submit" value="登录">
+                    </div>
+                    <p><a href="#">Forgot Password ?</a></p>
+                    <h1 style="color:red" th:text="${loginFail}" th:if="${not #strings.isEmpty(loginFail)}"></h1>
+                </form>
+            </div>
+
+        </div>
+    </body>
+</html>

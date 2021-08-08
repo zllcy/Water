@@ -1,0 +1,82 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: zll-login-8082
+
+    # 数据源
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/water?useUnicode=true&characterUnicoding=UTF8&useSSL=false&serverTimezone=Asia/Shanghai&useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 2000
+
+    druid:
+      # 配置初始化大小、最小、最大线程数
+      initialSize: 5
+      minIdle: 5
+      # 最大连接数通常是CPU核数+1，也可以大些但不要超过20，数据库加锁时连接过多性能下降
+      maxActive: 20
+      # 最大等待时间
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      # 空闲时间，单位是毫秒。连接空闲时间大于该值并且池中空闲连接大于minIdle则关闭该连接
+      minEvictableIdleTimeMillis: 300000
+      #测试连接是否可用的SQL语句，SELECT 1是MySQL的默认值
+      validationQuery: SELECT 1
+      # 应用向连接池获取连接的时候测试连接的有效性
+      testWhileIdle: true
+      testOnBorrow: false
+      # 设置从连接池归还连接时是否检查连接有效性，true检查，false不检查
+      testOnReturn: false
+      # 开启PreparedStatements Cache(提升写入、查询效率)，MySQL5.7以上建议true
+      poolPreparedStatements: true
+      # 打开Druid的监控统计功能
+      # stat监控统计  log4j日志监控  wall防御sql注入
+      filters: stat,wall,log4j
+      maxPoolPreparedStatementPerConnectionSize: 20
+      useGlobalDataSourceStat: true
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+
+  # thymeleaf模板引擎
+  thymeleaf:
+    cache: false
+    # 模板引擎的前缀
+    prefix: classpath:/templates/water/
+    # 模板引擎后缀
+    suffix: .html
+
+  # Springboot将从classpath中按如下优先级加载对应前端静态资源
+  # classpath:/static,classpath:/public,classpath:/resources,classpath:/META-INF/resource
+  # 除此之外还要加载E:/upLoad/picture/路径下的静态资源
+  resources:
+   static-locations: classpath:/static,classpath:/public,classpath:/resources,classpath:/META-INF/resource,file:${location}
+# 上传到服务器的路径
+location: D:/图库/water/
+
+# MyBatis
+mybatis:
+  # 配置指定包名称下面所有的类名称，在mapper.xml文件中只要写类名即可（小写也可）
+  type-aliases-package: com.zll.water.entities
+  configuration:
+    # 开启下划线转换为驼峰
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # 扫描resources下的mappers包下的所有Mapper结尾的xml文件
+  mapper-locations: classpath:/mappers/*Mapper.xml
+
+# 分页配置
+pagehelper:
+  # 指定分页插件使用哪种方言
+  helper-dialect: mysql
+  # 分页合理化参数，默认为false，当该值为true，pageNum<=0默认查询第一页，
+  # pageNum>pages时会查询最后一页，false时直接根据参数进行查询
+  reasonable: true
+  # 支持通过Mapper接口参数来传递分页参数
+  support-methods-arguments: true
+  params: count=countsql
+
+

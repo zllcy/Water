@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>更新客户</title>
+
+        <!--Bootstrap固定框架-->
+        <link rel='stylesheet' th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.css}">
+        <link rel='stylesheet' th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap-theme.css}">
+        <!--图标库-->
+        <link rel='stylesheet' th:href='@{/css/material-design-iconic-font.min.css}'>
+        <!--核心样式-->
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    </head>
+    <body>
+
+        <div id="viewport">
+
+            <!-- Sidebar -->
+            <div id="sidebar" th:replace="waterMainMenu::menu">
+
+
+            </div>
+
+            <!-- Content -->
+            <div id="content">
+                <nav class="navbar navbar-default" th:replace="waterMainMenu::nav">
+
+                </nav>
+                <div class="container-fluid">
+                    <div class="row" style="padding-left: 10px">
+                        <!--添加表单-->
+                        <form class="form-horizontal" th:action="@{/cust/updateCustomer}" method="post">
+                            <!--
+                            id作为隐藏参数传入到表单
+                            -->
+                            <input type="hidden" name="cid" th:value="${cust.cid}"/>
+                            <div class="form-group">
+                                <div class="col-sm-1">
+                                    客户名称
+                                </div>
+                                <div class="col-sm-5">
+                                    <input type="text" th:value="${cust.custName}" class="form-control" name="custName">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-1">
+                                    客户地址
+                                </div>
+                                <div class="col-sm-5">
+                                    <input type="text" th:value="${cust.custAddress}" class="form-control" name="custAddress">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-1">
+                                    联系方式
+                                </div>
+                                <div class="col-sm-5">
+                                    <input type="text" th:value="${cust.custMobile}" class="form-control" name="custMobile">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-1">
+                                    水票数量
+                                </div>
+                                <div class="col-sm-5">
+                                    <select name="custTicket" class="form-control">
+                                        <option vlaue="10" th:selected="${cust.custTicket eq 10}">10</option>
+                                        <option vlaue="20" th:selected="${cust.custTicket eq 20}">20</option>
+                                        <option vlaue="30" th:selected="${cust.custTicket eq 30}">30</option>
+                                        <option vlaue="50" th:selected="${cust.custTicket eq 50}">50</option>
+                                        <option vlaue="100" th:selected="${cust.custTicket eq 100}">100</option>
+                                        <option vlaue="200" th:selected="${cust.custTicket eq 200}">200</option>
+                                        <option vlaue="500" th:selected="${cust.custTicket eq 500}">500</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <input type="submit" class="btn btn-primary" value="提交"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+
+    </body>
+</html>

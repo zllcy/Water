@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zll.water.mapper.CustomerMapper">
+    <sql id="selectCustomer">
+        select cid,cust_name,cust_mobile,cust_address,cust_ticket from customer
+    </sql>
+
+    <!--
+    id属性值必须和接口方法一致
+    resultType 表示返回类型
+    -->
+    <select id="listCustomer" resultType="customer">
+        <include refid="selectCustomer"></include>
+    </select>
+
+    <select id="searchCustomer" resultType="customer">
+        <include refid="selectCustomer"></include>
+        where 1 = 1
+        <if test="custName != null and custName.length != 0">
+            and cust_name like concat('%', #{custName}, '%')
+        </if>
+    </select>
+    
+    <insert id="saveCustomer" parameterType="Customer">
+        insert into customer(cust_name, cust_mobile, cust_address, cust_ticket)
+        values (#{custName}, #{custMobile}, #{custAddress}, #{custTicket})
+    </insert>
+
+    <delete id="deleteCustomerById" parameterType="Integer">
+        delete from customer where cid = #{cid}
+    </delete>
+
+    <select id="getCustomerById" parameterType="Integer" resultType="Customer">
+        <include refid="selectCustomer"></include>
+        where cid = #{cid}
+    </select>
+
+    <update id="updateCustomer" parameterType="Customer">
+        update customer
+        set cust_name = #{custName}, cust_mobile = #{custMobile}, cust_address = #{custAddress}, cust_ticket = #{custTicket}
+        where cid = #{cid}
+    </update>
+
+    <delete id="batchDeleteCustomer" parameterType="List">
+        delete from customer where cid in
+        <foreach collection="idList" item="cid" open="(" close=")" separator=",">
+            #{cid}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zll.water.mapper.WorkerMapper">
+    <sql id="selectWorker">
+        select wid, worker_name, worker_salary, worker_money, worker_image from worker
+    </sql>
+
+    <!--
+    id属性值必须和接口方法一致
+    resultType 表示返回类型
+    -->
+    <select id="listWorker" resultType="Worker">
+        <include refid="selectWorker"></include>
+    </select>
+    
+    <select id="searchWorker" resultType="Worker">
+        <include refid="selectWorker"></include>
+        where 1 = 1
+        <if test="workerName != null and workerName.length != 0">
+            and worker_name like concat('%', #{workerName}, '%')
+        </if>
+    </select>
+
+    <insert id="saveWorker" parameterType="Worker">
+        insert into worker(worker_name, worker_salary, worker_money, worker_image)
+        values (#{workerName}, #{workerSalary}, #{workerMoney}, #{workerImage})
+    </insert>
+
+    <delete id="deleteWorkerById" parameterType="Integer">
+        delete from worker where wid = #{wid}
+    </delete>
+
+    <select id="getWorkerById" parameterType="Integer" resultType="Worker">
+        <include refid="selectWorker"></include>
+        where wid = #{wid}
+    </select>
+
+    <update id="updateWorker" parameterType="Worker">
+        update worker
+        set worker_name = #{workerName}, worker_salary = #{workerSalary}, worker_money = #{workerMoney}, worker_image = #{workerImage}
+        where wid = #{wid}
+    </update>
+
+    <delete id="batchDeleteWorker" parameterType="List">
+        delete from worker where wid in
+        <foreach collection="idList" item="wid" open="(" close=")" separator=",">
+            #{wid}
+        </foreach>
+    </delete>
+</mapper>

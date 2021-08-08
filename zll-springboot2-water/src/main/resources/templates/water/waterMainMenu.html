@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>c^_^y送水公司后台管理系统</title>
+
+        <!--Bootstrap固定框架-->
+        <link rel='stylesheet' th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.css}">
+        <link rel='stylesheet' th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap-theme.css}">
+        <!--图标库-->
+        <link rel='stylesheet' th:href='@{/css/material-design-iconic-font.min.css}'>
+        <!--核心样式-->
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    </head>
+    <body>
+
+        <div id="viewport">
+
+            <!-- Sidebar -->
+            <div id="sidebar" th:fragment="menu">
+                <header>
+                    <a href="/login">c^_^y送水公司后台管理</a>
+                </header>
+                <ul class="nav">
+                    <li>
+                        <!--        <a th:href="@{/cust/listCustomer}">-->
+                        <a th:href="@{/cust/listCustomerForPage}">
+                            <i class="zmdi zmdi-view-dashboard"></i> 客户管理
+                        </a>
+                    </li>
+                    <li>
+                        <!--        <a th:href="@{/worker/listWorker}">-->
+                        <a th:href="@{/worker/listWorkerForPage}">
+                            <i class="zmdi zmdi-link"></i> 送水工管理
+                        </a>
+                    </li>
+                    <li>
+<!--                        <a th:href="@{/history/listHistory}">-->
+                        <a th:href="@{/history/listHistoryForPage}">
+                            <i class="zmdi zmdi-widgets"></i> 送水历史管理
+                        </a>
+                    </li>
+                    <li>
+<!--                        <a th:href="@{/salary/listSalary}">-->
+                        <a th:href="@{/salary/listSalaryForPage}">
+                            <i class="zmdi zmdi-widgets"></i> 计算工资
+                        </a>
+                    </li>
+                    <li>
+<!--                        <a th:href="@{/water/countSendWaterInfo}">-->
+                        <a th:href="@{/water/listSendWaterInfoForPage}">
+                            <i class="zmdi zmdi-widgets"></i> 统计送水数量
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/preUpdateUserPwd}">
+                            <i class="zmdi zmdi-widgets"></i> 修改密码
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Content -->
+            <div id="content">
+                <nav class="navbar navbar-default" th:fragment="nav">
+                    <div class="container-fluid">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a href="#"><i class="zmdi zmdi-notifications text-danger"></i>
+                                </a>
+                            </li>
+                            <li><a href="#">[[${session.currentUser}]]</a></li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="container-fluid">
+
+                </div>
+            </div>
+
+        </div>
+
+    </body>
+</html>

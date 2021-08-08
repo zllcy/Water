@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>修改密码</title>
+
+        <!--Bootstrap固定框架-->
+        <link rel='stylesheet' th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.css}">
+        <link rel='stylesheet' th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap-theme.css}">
+        <!--图标库-->
+        <link rel='stylesheet' th:href='@{/css/material-design-iconic-font.min.css}'>
+        <!--核心样式-->
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+        <script th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
+        <script>
+            $(function () {
+                $("#updateUserPwd").click(function () {
+                    let userName = $("input[id=userName]").val();
+                    let newUserPwd = $("input[id=newUserPwd]").val();
+                    let newUserPwd2 = $("input[id=newUserPwd2]").val();
+                    if (newUserPwd != newUserPwd2) {
+                        alert("确认密码错误");
+                        return;
+                    }
+                    $.ajax({
+                        url: "/updateUserPwd",
+                        data: {"userName": userName, "newUserPwd": newUserPwd},
+                        method: "POST",
+                        success: function (data, status) {
+                            if (data == "success") {
+                                alert("修改成功，请重新登录");
+                                location.href = '/login'
+                            } else {
+                                alert("修改失败");
+                            }
+                        }
+                    })
+                })
+            })
+        </script>
+    </head>
+    <body>
+        <div id="viewport">
+
+            <!-- Sidebar -->
+            <div id="sidebar" th:replace="waterMainMenu::menu"></div>
+
+            <!-- Content -->
+            <div id="content">
+                <nav class="navbar navbar-default" th:replace="waterMainMenu::nav"></nav>
+                <div class="container-fluid">
+                    <div class="row" style="padding-left: 10px">
+                        <!--添加表单-->
+                        <form class="form-horizontal" enctype="multipart/form-data">
+
+                            <div class="form-group">
+                                <div class="col-sm-1">
+                                    用户名
+                                </div>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="userName">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-1">
+                                    新密码
+                                </div>
+                                <div class="col-sm-5">
+                                    <input type="password" class="form-control" id="newUserPwd">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-1">
+                                    确认密码
+                                </div>
+                                <div class="col-sm-5">
+                                    <input type="password" class="form-control" id="newUserPwd2">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <a class="btn btn-primary" id="updateUserPwd">提交</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </body>
+</html>

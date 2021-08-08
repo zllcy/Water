@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>计算工资</title>
+
+        <!--Bootstrap固定框架-->
+        <link rel='stylesheet' th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.css}">
+        <link rel='stylesheet' th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap-theme.css}">
+        <!--图标库-->
+        <link rel='stylesheet' th:href='@{/css/material-design-iconic-font.min.css}'>
+        <!--核心样式-->
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    </head>
+    <body>
+
+        <div id="viewport">
+
+            <!-- Sidebar -->
+            <div id="sidebar" th:replace="waterMainMenu::menu">
+
+
+            </div>
+
+            <!-- Content -->
+            <div id="content">
+                <nav class="navbar navbar-default" th:replace="waterMainMenu::nav">
+
+                </nav>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-4">
+
+                        </div>
+                        <div class="col-md-8">
+                            <form class="form-inline" th:action="@{/salary/searchSalaryForPage}" method="get">
+                                <input type="date" th:value="${#strings.isEmpty(start) ? '': start}" name="start"
+                                       class="form-control">
+                                <input type="date" th:value="${#strings.isEmpty(end) ? '': end}" name="end"
+                                       class="form-control">
+                                <input type="submit" class="btn btn-warning" name="search" value="搜索"/>
+                            </form>
+                        </div>
+
+                        <div class="col-md-12">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                <tr>
+                                    <td>送水工名称</td>
+                                    <td>送水工底薪</td>
+                                    <td>每桶提成</td>
+                                    <td>送水数量</td>
+                                    <td>实发工资</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="salary : ${salaryList}">
+                                    <td th:text="${salary.workerName}"></td>
+                                    <td th:text="${salary.workerSalary}"></td>
+                                    <td th:text="${salary.workerMoney}"></td>
+                                    <td th:text="${salary.sendWaterCount}"></td>
+                                    <td th:text="${salary.finalWorkerSalary}"></td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-12">
+                            <div th:switch="${pageData}" class="modal-footer no-margin-top">
+                                <div class="col-md-6">
+                                    当前第 [[${pageInfo.pageNum}]]页，共 [[${pageInfo.pages}]] 页，共 [[${pageInfo.total}]] 条记录
+                                </div>
+
+                                <ul th:case="'listSalary'" class="pagination pull-right no-margin">
+                                    <li th:if="${pageInfo.hasPreviousPage}">
+                                        <a th:href="'/salary/listSalaryForPage?pageNum=1'">首页</a>
+                                    </li>
+
+                                    <li class="prev" th:if="${pageInfo.hasPreviousPage}">
+                                        <a th:href="'/salary/listSalaryForPage?pageNum='+${pageInfo.prePage}">
+                                            <i class="ace-icon fa fa-angle-double-left"></i>
+                                            上一页
+                                        </a>
+                                    </li>
+                                    <!--遍历条数-->
+                                    <li th:each="nav:${pageInfo.navigatepageNums}">
+                                        <a th:href="'/salary/listSalaryForPage?pageNum='+${nav}" th:text="${nav}"
+                                           th:if="${nav != pageInfo.pageNum}"></a>
+                                        <span style="font-weight: bold;background: #6faed9;"
+                                              th:if="${nav == pageInfo.pageNum}" th:text="${nav}"></span>
+                                    </li>
+
+                                    <li class="next" th:if="${pageInfo.hasNextPage}">
+                                        <a th:href="'/salary/listSalaryForPage?pageNum='+${pageInfo.nextPage}">
+                                            <i class="ace-icon fa fa-angle-double-right"></i>
+                                            下一页
+                                        </a>
+                                    </li>
+
+                                    <li th:if="${pageInfo.hasNextPage}">
+                                        <a th:href="'/salary/listSalaryForPage?pageNum='+${pageInfo.pages}">尾页</a>
+                                    </li>
+                                </ul>
+
+                                <ul th:case="'searchData'" class="pagination pull-right no-margin">
+                                    <li th:if="${pageInfo.hasPreviousPage}">
+                                        <a th:href="'/salary/searchSalaryForPage?start='+${start}+'&end='+${end}+'&pageNum=1'">首页</a>
+                                    </li>
+
+                                    <li class="prev" th:if="${pageInfo.hasPreviousPage}">
+                                        <a th:href="'/salary/searchSalaryForPage?start='+${start}+'&end='+${end}+'&pageNum='+${pageInfo.prePage}">
+                                            <i class="ace-icon fa fa-angle-double-left"></i>
+                                            上一页
+                                        </a>
+                                    </li>
+                                    <!--遍历条数-->
+                                    <li th:each="nav:${pageInfo.navigatepageNums}">
+                                        <a th:href="'/salary/searchSalaryForPage?start='+${start}+'&end='+${end}+'&pageNum='+${nav}"
+                                           th:text="${nav}" th:if="${nav != pageInfo.pageNum}"></a>
+                                        <span style="font-weight: bold;background: #6faed9;"
+                                              th:if="${nav == pageInfo.pageNum}" th:text="${nav}"></span>
+                                    </li>
+
+                                    <li class="next" th:if="${pageInfo.hasNextPage}">
+                                        <a th:href="'/salary/searchSalaryForPage?start='+${start}+'&end='+${end}+'&pageNum='+${pageInfo.nextPage}">
+                                            <i class="ace-icon fa fa-angle-double-right"></i>
+                                            下一页
+                                        </a>
+                                    </li>
+
+                                    <li th:if="${pageInfo.hasNextPage}">
+                                        <a th:href="'/salary/searchSalaryForPage?start='+${start}+'&end='+${end}+'&pageNum='+${pageInfo.pages}">尾页</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        </div>
+
+    </body>
+</html>
